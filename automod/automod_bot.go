@@ -730,7 +730,7 @@ func (p *Plugin) ClearViolations(guildID int64, userID int64, violationName stri
 		return 0, err
 	}
 
-	deletedCount, err := violations.DeleteAll(context.Background())
+	deletedCount, err := violations.DeleteAll(context.Background(), common.PQ)
 	if err != nil {
 		return 0, err
 	}

@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "build": "cd cmd/yagpdb && sh build.sh"
+  }
+}
