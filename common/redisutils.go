@@ -2,6 +2,7 @@ package common
 
 import (
 	"encoding/json"
+	"database/sql"
 
 	"github.com/mediocregopher/radix/v3"
 )
@@ -42,4 +43,24 @@ func MultipleCmds(cmds ...radix.CmdAction) error {
 	}
 
 	return nil
+}
+
+// Utility functions for working with the database connection
+func QueryDatabase(db *sql.DB, query string, args ...interface{}) (*sql.Rows, error) {
+	return db.Query(query, args...)
+}
+
+func ExecDatabase(db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
+	return db.Exec(query, args...)
+}
+
+// Utility functions for working with the redis connection
+func QueryRedis(pool *radix.Pool, cmd string, args ...string) (string, error) {
+	var result string
+	err := pool.Do(radix.Cmd(&result, cmd, args...))
+	return result, err
+}
+
+func ExecRedis(pool *radix.Pool, cmd string, args ...string) error {
+	return pool.Do(radix.Cmd(nil, cmd, args...))
 }

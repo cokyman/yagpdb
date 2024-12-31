@@ -1,8 +1,10 @@
 package common
 
 import (
+	"database/sql"
 	"github.com/botlabs-gg/yagpdb/v2/lib/discordgo"
 	"github.com/botlabs-gg/yagpdb/v2/lib/dstate"
+	"github.com/mediocregopher/radix/v3"
 )
 
 // IsRoleAbove returns whether role a is above b,
@@ -66,5 +68,24 @@ func ChannelOrThreadParentID(cs *dstate.ChannelState) int64 {
 	}
 
 	return cs.ID
+}
 
+// Utility functions for working with the database connection
+func QueryDatabase(db *sql.DB, query string, args ...interface{}) (*sql.Rows, error) {
+	return db.Query(query, args...)
+}
+
+func ExecDatabase(db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
+	return db.Exec(query, args...)
+}
+
+// Utility functions for working with the redis connection
+func QueryRedis(pool *radix.Pool, cmd string, args ...string) (string, error) {
+	var result string
+	err := pool.Do(radix.Cmd(&result, cmd, args...))
+	return result, err
+}
+
+func ExecRedis(pool *radix.Pool, cmd string, args ...string) error {
+	return pool.Do(radix.Cmd(nil, cmd, args...))
 }

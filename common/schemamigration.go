@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/mediocregopher/radix/v3"
 )
 
 var (
@@ -151,4 +153,13 @@ func InitSchemas(name string, schemas ...string) {
 		actualName := fmt.Sprintf("%s[%d]", name, i)
 		initSchema(v, actualName)
 	}
+}
+
+func MigrateDatabaseSchema(schema string) error {
+	_, err := PQ.Exec(schema)
+	return err
+}
+
+func MigrateRedisSchema(commands []radix.CmdAction) error {
+	return MultipleCmds(commands...)
 }

@@ -60,3 +60,13 @@ func GenLocalIncrIDPQ(tx *sql.Tx, guildID int64, key string) (int64, error) {
 
 	return newID, nil
 }
+
+// GetNextLocalIDFromDB retrieves the next local ID from the database
+func GetNextLocalIDFromDB(guildID int64, key string) (int64, error) {
+	return GenLocalIncrIDPQ(nil, guildID, key)
+}
+
+// GetNextLocalIDFromRedis retrieves the next local ID from Redis
+func GetNextLocalIDFromRedis(guildID int64, key string) (int64, error) {
+	return GenLocalIncrID(guildID, key)
+}

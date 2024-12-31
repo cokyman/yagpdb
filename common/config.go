@@ -37,6 +37,14 @@ var (
 	ConfShardBucketSize         = config.RegisterOption("yagpdb.shard.shard_bucket_size", "Shards per bucket", 2)
 	ConfHttpProxy               = config.RegisterOption("yagpdb.http.proxy", "Proxy Url", "")
 
+	ConfDBHost     = config.RegisterOption("yagpdb.dbhost", "Database host", "localhost")
+	ConfDBUsername = config.RegisterOption("yagpdb.dbusername", "Database user", "postgres")
+	ConfDBPassword = config.RegisterOption("yagpdb.dbpassword", "Database password", "")
+	ConfDBName     = config.RegisterOption("yagpdb.dbname", "Database name", "yagpdb")
+
+	ConfRedisHost     = config.RegisterOption("yagpdb.redishost", "Redis host", "localhost:6379")
+	ConfRedisPassword = config.RegisterOption("yagpdb.redispassword", "Redis password", "")
+
 	BotOwners []int64
 )
 

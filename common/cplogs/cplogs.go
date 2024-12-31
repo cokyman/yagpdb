@@ -1,10 +1,13 @@
 package cplogs
 
 import (
+	"context"
 	"time"
 
 	"github.com/botlabs-gg/yagpdb/v2/common"
 	"github.com/sirupsen/logrus"
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/mediocregopher/radix/v3"
 )
 
 type ActionFormat struct {
@@ -81,4 +84,30 @@ func GetEntries(guildID int64, limit int, before int64) ([]*LogEntry, error) {
 	}
 
 	return parsedResult, nil
+}
+
+func LogDatabaseQuery(ctx context.Context, query string, args ...interface{}) {
+	db := common.GetDatabaseFromContext(ctx)
+	if db == nil {
+		logrus.Warn("No database connection found in context")
+		return
+	}
+
+	_, err := db.ExecContext(ctx, query, args...)
+	if err != nil {
+		logrus.WithError(err).Error("Failed to log database query")
+	}
+}
+
+func LogRedisCommand(ctx context.Context, cmd string, args ...string) {
+	redis := common.GetRedisFromContext(ctx)
+	if redis == nil {
+		logrus.Warn("No redis connection found in context")
+		return
+	}
+
+	err := redis.Do(radix.Cmd(nil, cmd, args...))
+	if err != nil {
+		logrus.WithError(err).Error("Failed to log redis command")
+	}
 }
