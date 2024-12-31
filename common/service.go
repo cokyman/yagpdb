@@ -31,6 +31,8 @@ const (
 	ServiceTypeConfigService ServiceType = "configservice"
 	ServiceTypeFeed          ServiceType = "feed"
 	ServiceTypeOrchestator   ServiceType = "orchestrator"
+	ServiceTypeDatabase      ServiceType = "database"
+	ServiceTypeRedis         ServiceType = "redis"
 )
 
 // Service represents a service or component of yagpdb
@@ -309,4 +311,12 @@ func (sp *servicePoller) GetShardCount() (int, error) {
 	}
 
 	return 0, ErrNotFound
+}
+
+func RegisterDatabaseService() {
+	ServiceTracker.RegisterService(ServiceTypeDatabase, "Database Service", "Handles database connections", nil)
+}
+
+func RegisterRedisService() {
+	ServiceTracker.RegisterService(ServiceTypeRedis, "Redis Service", "Handles redis connections", nil)
 }

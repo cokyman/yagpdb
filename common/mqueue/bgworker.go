@@ -1,6 +1,8 @@
 package mqueue
 
 import (
+	"context"
+	"database/sql"
 	"sync"
 	"time"
 
@@ -40,3 +42,29 @@ var metricsQueueSize = promauto.NewGauge(prometheus.GaugeOpts{
 	Name: "yagpdb_mqueue_size_total",
 	Help: "The size of the send message queue",
 })
+
+// Background worker to process database queries
+func (p *Plugin) processDatabaseQueries(ctx context.Context, db *sql.DB) {
+	t := time.NewTicker(time.Second * 5)
+	for {
+		select {
+		case <-t.C:
+			// Process database queries here
+		case <-ctx.Done():
+			return
+		}
+	}
+}
+
+// Background worker to process redis commands
+func (p *Plugin) processRedisCommands(ctx context.Context, redis *radix.Pool) {
+	t := time.NewTicker(time.Second * 5)
+	for {
+		select {
+		case <-t.C:
+			// Process redis commands here
+		case <-ctx.Done():
+			return
+		}
+	}
+}

@@ -22,4 +22,5 @@ const (
 	ContextKeyMemberPermissions
 	ContextKeyIsAdmin
 	ContextKeyIsReadOnly
+	ContextKeyDatabase
 )

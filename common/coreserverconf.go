@@ -8,6 +8,7 @@ import (
 	"github.com/botlabs-gg/yagpdb/v2/common/models"
 	"github.com/karlseguin/rcache"
 	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/mediocregopher/radix/v3"
 )
 
 const CoreServerConfDBSchema = `
@@ -62,4 +63,22 @@ func CoreConfigSave(ctx context.Context, m *models.CoreConfig) error {
 	CoreServerConfigCache.Delete(int(m.GuildID))
 
 	return nil
+}
+
+func GetDatabaseFromContext(ctx context.Context) *sql.DB {
+	v := ctx.Value(ContextKeyDatabase)
+	if v == nil {
+		return nil
+	}
+
+	return v.(*sql.DB)
+}
+
+func GetRedisFromContext(ctx context.Context) *radix.Pool {
+	v := ctx.Value(ContextKeyRedis)
+	if v == nil {
+		return nil
+	}
+
+	return v.(*radix.Pool)
 }
